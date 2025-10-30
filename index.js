@@ -2,11 +2,13 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 
 const app = express();
 const PORT = 3000;
 
 app.use(bodyParser.json());
+app.use(cors());
 
 mongoose.connect('mongodb+srv://adhamabbas2006:adham2006@cluster0.eee90.mongodb.net/?appName=Cluster0')
   .then(() => console.log('Connected to database'))
