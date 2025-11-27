@@ -53,7 +53,6 @@ exports.listEvents = async (req, res) => {
 
     const skip = (Math.max(1, parseInt(page)) - 1) * parseInt(limit);
 
-    // Base role filter
     let or = [
       { organizer: req.user.id },
       { "attendees.user": req.user.id },
@@ -62,7 +61,6 @@ exports.listEvents = async (req, res) => {
       { "collaboratorInvitees.user": req.user.id },
     ];
 
-    // Apply specific role if provided
     if (role === "organizer") or = [{ organizer: req.user.id }];
     else if (role === "attendee") or = [{ "attendees.user": req.user.id }];
     else if (role === "invitee") or = [{ "invitees.user": req.user.id }];
@@ -73,7 +71,6 @@ exports.listEvents = async (req, res) => {
 
     const baseFilter = { $or: or };
 
-    // Text search on title or description
     let searchFilter = {};
     if (q) {
       searchFilter = {
@@ -84,7 +81,6 @@ exports.listEvents = async (req, res) => {
       };
     }
 
-    // Date filter
     let dateFilter = {};
     if (date) {
       const d = new Date(date);
@@ -94,16 +90,13 @@ exports.listEvents = async (req, res) => {
     }
 
 
-    // Combine all filters using $and
     const filter = { $and: [baseFilter] };
     if (q) filter.$and.push(searchFilter);
     if (date) filter.$and.push(dateFilter);
 
-    // Sorting
     const sort = {};
     sort[sortBy] = order === "asc" ? 1 : -1;
 
-    // Query
     const events = await Event.find(filter)
       .sort(sort)
       .skip(skip)
@@ -381,7 +374,6 @@ exports.getCollaborators = async (req, res) => {
   if (!event)
     return res.status(404).json({ success: false, error: "Event not found" });
 
-  // Only organizer can view collaborators
   if (!event.organizer.equals(req.user.id))
     return res
       .status(403)
