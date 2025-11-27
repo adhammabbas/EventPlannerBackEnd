@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const AttendeeSchema = new mongoose.Schema({
+const UserSchema = new mongoose.Schema({
   user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   email: { type: String },
   role: {
@@ -27,10 +27,10 @@ const EventSchema = new mongoose.Schema({
     ref: "User",
     required: true,
   },
-  invitees: [AttendeeSchema],
-  attendees: [AttendeeSchema],
-  collaboratorInvitees: [AttendeeSchema],
-  collaborators: [AttendeeSchema],
+  invitees: [UserSchema],
+  attendees: [UserSchema],
+  collaboratorInvitees: [UserSchema],
+  collaborators: [UserSchema],
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
 });

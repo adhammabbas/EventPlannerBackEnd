@@ -46,8 +46,7 @@ exports.listEvents = async (req, res) => {
       role = "all",
       page = 1,
       limit = 20,
-      startDate,
-      endDate,
+      date,
       sortBy = "date",
       order = "asc",
     } = req.query;
@@ -87,16 +86,18 @@ exports.listEvents = async (req, res) => {
 
     // Date filter
     let dateFilter = {};
-    if (startDate || endDate) {
-      dateFilter.date = {};
-      if (startDate) dateFilter.date.$gte = new Date(startDate);
-      if (endDate) dateFilter.date.$lte = new Date(endDate);
+    if (date) {
+      const d = new Date(date);
+      const start = new Date(d.setHours(0, 0, 0, 0));
+      const end = new Date(d.setHours(23, 59, 59, 999));
+      dateFilter.date = { $gte: start, $lte: end };
     }
+
 
     // Combine all filters using $and
     const filter = { $and: [baseFilter] };
     if (q) filter.$and.push(searchFilter);
-    if (startDate || endDate) filter.$and.push(dateFilter);
+    if (date) filter.$and.push(dateFilter);
 
     // Sorting
     const sort = {};
