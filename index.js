@@ -13,14 +13,14 @@ const PORT = process.env.PORT;
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
-  origin: 'http://localhost:3001', 
+  origin: 'http://localhost:3000', 
   credentials: true                
 }));
 
 app.use('/api/auth', authRoutes);
 app.use('/api/events', eventRoutes); 
 
-mongoose.connect(process.env.CONNECTION_STRING)
+mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('Connected to database'))
   .catch(err => console.error('Database connection error:', err));
 
