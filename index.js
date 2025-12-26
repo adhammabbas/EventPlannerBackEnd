@@ -13,7 +13,7 @@ const PORT = process.env.PORT;
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
-  origin: 'https://frontend-crt-20226063-dev.apps.rm2.thpm.p1.openshiftapps.com/', 
+  origin: 'https://frontend-crt-20226063-dev.apps.rm2.thpm.p1.openshiftapps.com', 
   credentials: true                
 }));
 
